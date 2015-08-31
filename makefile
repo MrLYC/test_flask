@@ -42,3 +42,6 @@ requires: $(ROOTPATH)/requirements.txt
 author-config:
 	git config user.email imyikong@gmail.com --local
 	git config user.name MrLYC --local
+
+server-run:
+	$(PYTHON) $(SRCPATH)/server.py
