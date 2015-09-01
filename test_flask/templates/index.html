@@ -4,7 +4,54 @@
   <head>
     <title>标题</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <sctipt>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        $(function(){
+            function print(data){
+                var last_line = $("li.output:last");
+                var line = last_line.clone();
+                line.children("p").text(data);
+                last_line.after(line);
+            }
+
+            function calc(expr, callback){
+                $.post(
+                    "{{ url_for('calc') }}",
+                    {"expr": expr},
+                    callback
+                )
+            }
+
+            var input_box = $("#input_box");
+            var submit_btn = $("#submit_btn");
+
+            submit_btn.click(function(){
+                var expr = input_box.val();
+                if (expr.length == 0){
+                    print("");
+                    return;
+                }
+                input_box.attr("readonly", "readonly");
+
+                submit_btn.attr("disabled", "disabled");
+                calc(expr, function(result){
+                    input_box.removeAttr("readonly");
+                    input_box.val("");
+                    submit_btn.removeAttr("disabled");
+                    print(result);
+                });
+
+            });
+
+            input_box.keypress(function(event){
+                if (event.which == 13){
+                    event.preventDefault();
+                    submit_btn.click();
+                }
+            });
+
+            print("ready");
+        });
     </script>
   </head>
   <body>
@@ -14,8 +61,8 @@
                 <li class="line output"><p>{{ i }}</p></li>
             {% endfor %}
             <li class="line input">
-                <input class="input_box" type="text" />
-                <button class="submit_btn">提交</button>
+                <input id="input_box" type="text" />
+                <button id="submit_btn">提交</button>
             </li>
         </ul>
     </div>

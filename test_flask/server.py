@@ -20,7 +20,7 @@ Calc_Func = {
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html", init_lines=(
-        u"Welcome",
+        u"Welcome to calculator",
     ))
 
 
@@ -30,9 +30,9 @@ def calc():
     if not expr:
         return ""
     try:
-        return str(safecalc(expr, Calc_Func))
+        return "%s = %s" % (expr, safecalc(expr, Calc_Func))
     except Exception as err:
-        return "Error: %s" % err
+        return "%s" % err
 
 
 def main():
