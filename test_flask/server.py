@@ -15,6 +15,7 @@ Calc_Func = {
     n: f
     for n, f in iter_attrs(math, exclude_methods=False)
 }
+Calc_Func["dir"] = dir
 
 
 @app.route("/", methods=["GET"])
@@ -30,9 +31,9 @@ def calc():
     if not expr:
         return ""
     try:
-        return "%s = %s" % (expr, safecalc(expr, Calc_Func))
+        return "> %s = %s" % (expr, safecalc(expr, Calc_Func))
     except Exception as err:
-        return "%s" % err
+        return "# %s" % err
 
 
 def main():
